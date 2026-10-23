@@ -1,0 +1,27 @@
+blueprint:
+  name: Keep selected switches on
+  description: >-
+    Automatically turn selected switches back on whenever
+    they transition to off.
+  domain: automation
+  input:
+    switches:
+      name: Switches
+      description: Select the switches that should always remain on.
+      selector:
+        entity:
+          multiple: true
+          domain: switch
+
+triggers:
+  - trigger: state
+    entity_id: !input switches
+    to: "off"
+
+actions:
+  - action: switch.turn_on
+    target:
+      entity_id: "{{ trigger.entity_id }}"
+
+mode: parallel
+max: 50
